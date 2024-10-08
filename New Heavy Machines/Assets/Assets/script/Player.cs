@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -20,10 +21,18 @@ public class Player : MonoBehaviour
     public GameObject[] dejetosBons;
     public GameObject positionDejeto;
 
+    [Header("limpar cidade")]
+    public float coletaAtual;
+    public float coletaMaxima;
+    public Image barraColeta;
+    public GameObject ciadadeSuja;
+    public GameObject cidadeLimpa;
+
     void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        
     }
 
     // Update is called once per frame
@@ -35,6 +44,7 @@ public class Player : MonoBehaviour
 
         RotateWithCamera();
 
+        barraColeta.fillAmount = coletaAtual / coletaMaxima;
 
     }
     public void RotateWithCamera()
@@ -56,6 +66,12 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Lixo"))
         {
+            coletaAtual += 100;
+            if(coletaAtual >= coletaMaxima)
+            {
+                ciadadeSuja.SetActive(false);
+                cidadeLimpa.SetActive(true);
+            }
             Destroy(other.gameObject);
             Instantiate(dejetosBons[Random.Range(0, dejetosBons.Length)],positionDejeto.transform.position, Quaternion.identity);
         }
